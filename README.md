@@ -2,10 +2,10 @@
 
 <div align="center">
 
-[![Paper](https://img.shields.io/badge/arXiv-Preprint-brightgreen)](https://arxiv.org/abs/)
-[![Conference](https://img.shields.io/badge/ICCV21-Paper-blue)](https://arxiv.org/abs/)
-[![Poster](https://img.shields.io/badge/ICCV21-Poster-purple)](https://arxiv.org/abs/)
-[![Youtube](https://img.shields.io/badge/ICCV21-Presentation-red)](https://youtu.be/)
+[![Paper](https://img.shields.io/badge/arXiv-Preprint-brightgreen)](https://arxiv.org/abs/2109.09704)
+[![Conference](https://img.shields.io/badge/ICCV21-Paper-blue)](https://arxiv.org/abs/2109.09704)
+[![Poster](https://img.shields.io/badge/ICCV21-Poster-purple)](https://arxiv.org/abs/2109.09704)
+[![Youtube](https://img.shields.io/badge/ICCV21-Presentation-red)](https://arxiv.org/abs/2109.09704)
 
 This repository contains MATLAB-implementation of the BabelCalib calibration framework.
 
