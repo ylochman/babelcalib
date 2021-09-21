@@ -1,0 +1,3 @@
+[submodule "vgtk"]
+	path = vgtk
+	url = git@github.com:prittjam/vgtk.git
