@@ -1,5 +1,5 @@
-function [boards, board_idxs] = get_boards_from_dsc(dsc_path, board_idxs)
-    target = CalibrationTarget(dsc_path);
+function [boards, board_idxs] = get_boards_from_dsc(dsc_path, tp_path, board_idxs)
+    target = CalibrationTarget(dsc_path, tp_path);
     if isempty(board_idxs)
         board_idxs = 1:numel(target.boards_);
     end

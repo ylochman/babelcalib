@@ -2,19 +2,14 @@ init;
 calib_cfg;
 
 base = fullfile(root, 'data', 'ov_plane');
-dsc_path = fullfile(base, 'ov_plane.dsc');
 
 % Data
-train.orpc = glob(fullfile(base, 'corners', 'train'), {'*.orpc'});
-train.img = cellfun(@(x) [x(1:end-4) 'png'], train.orpc, 'UniformOutput',0);
-
-test.orpc = glob(fullfile(base, 'corners', 'test'), {'*.orpc'});
-test.img = cellfun(@(x) [x(1:end-4) 'png'], test.orpc, 'UniformOutput',0);
+train = load(fullfile(base, 'train'));
+test = load(fullfile(base, 'test'));
 
 % Calibration
-train_model = calibrate_OD(train.orpc, dsc_path,...
-                            'img_paths', train.img, cfg{:});
+train_model = calibrate(train.corners, train.boards, train.imgsize, cfg{:});
 
 % Evaluation (camera pose estimation)
-test_model = get_poses_OD(test.orpc, dsc_path, 'model', train_model,...
-                            'img_paths', test.img, cfg{:});
+test_model = get_poses(train_model, test.corners, test.boards,...
+                      test.imgsize, cfg{:});

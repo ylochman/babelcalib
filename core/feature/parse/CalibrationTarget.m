@@ -6,11 +6,11 @@ classdef CalibrationTarget < handle
   end
 
   methods
-    function this = CalibrationTarget(dsc_file)
-      this.loadFromDSCFile(dsc_file);
+    function this = CalibrationTarget(dsc_file, tp_file)
+      this.loadFromDSCFileTPFile(dsc_file, tp_file);
     end
     
-    function this = loadFromDSCFile(this, dsc_file)
+    function this = loadFromDSCFileTPFile(this, dsc_file, tp_file)
       % the camera ID is the filename
       [path, this.target_id_, ~] = fileparts(dsc_file);
       
@@ -56,7 +56,7 @@ classdef CalibrationTarget < handle
         end;      
       end;
       fclose(fid);
-      fid2 = fopen([path filesep this.target_id_ '.tp']);
+      fid2 = fopen(tp_file);
       % get rid of the header
       fgetl(fid2);
       for i=1:numel(this.boards_)
