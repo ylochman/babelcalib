@@ -24,9 +24,7 @@ This repository contains the MATLAB implementation of the BabelCalib calibration
 </div>
 
 ## Description
-BabelCalib is a calibration framework that can estimate camera models for all types of central projection cameras. Calibration is robust and fully automatic. BabelCalib provides models for pinhole cameras with additive distortion as well as omni-directional cameras and catadioptric rigs. The supported camera models are listed under the [solvers](./core/solvers) directory.
-
-BabelCalib supports calibration targets made of a collection of calibration boards, i.e., multiple planar targets. The method is agnostic to the pattern type on the calibration boards. The 3D<->2D correspondence of the calibration board fiducials to the detected corners in the captured images must be porovided. In addition, the board poses must be provided. Any calibration board of the target may be partially or fully occluded in a calibration image. The method is robust to inaccurately localized corners and outlying detections. 
+BabelCalib is a calibration framework that can estimate camera models for all types of central projection cameras. Calibration is robust and fully automatic. BabelCalib provides models for pinhole cameras with additive distortion as well as omni-directional cameras and catadioptric rigs. The supported camera models are listed under the [solvers](./core/solvers) directory. BabelCalib supports calibration targets made of a collection of calibration boards, i.e., multiple planar targets. The method is agnostic to the pattern type on the calibration boards. It is robust to inaccurately localized corners, outlying detections and occluded targets. 
 
 ## Table of Contents
 - [Installation](#installation)
@@ -34,8 +32,8 @@ BabelCalib supports calibration targets made of a collection of calibration boar
     - [Evaluation](#evaluation)
     - [Type Definitions](#defs)
 - [Examples and wrappers](#examples)
-    - [Calibrating with 3D<->2D correspondences](#csponds)
-    - [Calibrating with Deltille](#deltille)
+    - [Calibrating with 2D<->3D correspondences](#calib-csponds)
+    - [Calibrating with Deltille](#calib-deltille)
 - [Citation](#citation)
 - [License](#license)
 
@@ -55,15 +53,15 @@ git submodule update --init --recursive
 <a name="calibration"/>
 
 ## Calibration
-Calibration is performed by the function [`calibrate.m`](./core/calibrate.m). 
+Calibration is performed by the function [`calibrate.m`](./core/calibrate.m).  The user provides the 2D<->3D correspondence of the corner detections in the captured images as well as the coordinates of the calibration board fiducials and the absolute poses of the calibration boards. Any calibration board of the target may be partially or fully occluded in a calibration image. The camera model is returned as well as diagnostics about the calibration. 
+
 ```matlab
 function [model, res, corners, boards] = calibrate(corners, boards, imgsize, varargin)
 ```
 Parameters:
 * `corners` : type [corners](#corners)
 * `boards` : type [boards](#boards)
-* `imgsize` : 1x2 array
-              specifies the height and width of the images; all the images are assumed to have the same dimensions.
+* `imgsize` : 1x2 array specifying the height and width of the images; all images in a capture are assumed to have the same dimensions.
 * `varargin` : [optional arguments](#cfg)
 
 Returns
@@ -76,7 +74,7 @@ Returns
 <a name="evaluation"/>
 
 ## Evaluation
-BabelCalib adopts the train/test set terminology. The training set contains the images used for calibration, and the test set contains held-out images for evaluation. Comparing on test-set images demonstrated how well the calibration generalizes to new images. During testing, the intriniscs are kept fixed and only the poses of the camera are estimated. The RMS re-projection error is used to assess the calibration quality. The poses are estimated by [`get_poses.m`](./core/get_poses.m):
+BabelCalib adopts the train-test set methodology for fitting and evaluation. The training set contains the images used for calibration, and the test set contains held-out images for evaluation. Evaluating a model on test-set images demonstrates how well a calibration generalizes to unseen imagery. During testing, the intriniscs are kept fixed and only the poses of the camera are regressed. The RMS re-projection error is used to assess calibration quality. The poses are estimated by [`get_poses.m`](./core/get_poses.m):
 ```matlab
 function [model, res, corners, boards] = get_poses(intrinsics, corners, boards, imgsize, varargin)
 ```    
@@ -102,41 +100,61 @@ Returns
 <a name="corners"/>
 
 #### `corners` : 1xN struct array 
-Contains the set of 3D<->2D correspondences of the calibration board fiducials to the detected corners in each image. Let `N` be the number of images; Kn be the number of detected corners in the n-th image, where (n=1,...,N); and `B` be the number of planar calibration boards.
+Contains the set of 2D<->3D correspondences of the calibration board fiducials to the detected corners in each image. Here, we let `N` be the number of images; Kn be the number of detected corners in the n-th image, where (n=1,...,N); and `B` be the number of planar calibration boards.
 
 | field         | data type     | description  |
 |:-------------:|:---------------------:|:-------------|
-| x      | 2xKn array |  2D coordinates specifying the detected corners |
-| cspond | 2xKn array | correspondences, where the first row contains the structure point correspondences and the second row contains board correspondences  |
+| `x`      | 2xKn array | 2D coordinates specifying the detected corners |
+| `cspond` | 2xKn array | correspondences, where each column is a correspondence and the first row contains the indices to points and the second row contains indices to calibration board fiducials |
 
 <a name="boards"/>
 
 #### `boards` : 1xB struct array
-Contains the set of poses for each of the `B` calibration boards of the target, where (b=1,...,B) indexes the calibration boards.
+Contains the set of absolute poses for each of the `B` calibration boards of the target, where (b=1,...,B) indexes the calibration boards. Also specifies the coordinates of the fiducials on each of the calibration boards. 
 
 | field         | data type     | description  |
 |:-------------:|:---------------------:|:-------------|
-| Rt | 3x4 array | The absolute orientation of each pose is encoded in the 3x4 pose matrix. |
-| X  | 2xKb array | 2D coordinates of the fiducials on the board b of the target. The coordinates are specified with respect to a 2D coordinate system attached to each board |
+| `Rt` | 3x4 array | absolute orientation of each pose is encoded in the 3x4 pose matrix |
+| `X`  | 2xKb array | 2D coordinates of the fiducials on board b of the target. The coordinates are specified with respect to the 2D coordinate system attached to each board |
 
 <a name="model"/>
 
 #### `model` : struct
-Contains the intrinsics and extrinsics of the regressed camera model. The number of parameters of the back-projection or projection model, denoted `C`, depend on the chosen camera model and model complexity. 
+Contains the intrinsics and extrinsics of the regressed camera model. The number of parameters of the back-projection or projection model, denoted `C`, depends on the chosen camera model and model complexity. 
 
 | field         | data type     | description  |
 |:-------------:|:---------------------:|:-------------|
-| proj_params | 1xC array (C depends on model complexity) | The parameters of projection or back-projection function. |
-| K  | 3x3 array | Affine matrix mapping from retinal coordinates to image coordinates (relating to `A` in the paper: `K = inv(A)`) |
-| Rt | 3x4xN array | camera poses stacked along the array depth |
+|  `proj_model` | str | name of the target projection model
+| `proj_params` | 1xC array | parameters of the projection/back-projection function |
+| `K`  | 3x3 array | camera calibration matrix (relating to `A` in the paper: `K = inv(A)`) |
+| `Rt` | 3x4xN array | camera poses stacked along the array depth |
 
 <a name="res"/>
 
 #### `res` : struct
-Contains extra information about the optimization. 
+Contains the information about the residuals, loss and initialization (minimal solution). Here, we let `K` be the total number of corners in all the images.
 
 | field         | data type     | description  |
 |:-------------:|:---------------------:|:-------------|
+|          `loss`| double | loss value
+|            `ir`| double | inlier ratio
+|    `reprojerrs`| 1xK array | reprojection errors
+|           `rms`| double | root mean square reprojection error
+|          `wrms`| double | root mean square weighted reprojection error (Huber weights)
+|          `info`| type [info](#info) | 
+
+<a name="info"/>
+
+#### `info` : struct
+Contains additional information about the residuals, loss and initialization (minimal solution).
+| field         | data type     | description  |
+|:-------------:|:---------------------:|:-------------|
+|           `dx` | 2xK array            | re-projection difference vectors: `dx` = `x` - `x_hat`
+|            `w` | 1xK array            | Huber weights on the norms of `dx`
+|     `residual` | 2xK array            | residuals: `residual` = `w` .* `dx`
+|           `cs` | 1xK array (boolean)  | consensus set indicators (`1` if inlier, `0` otherwise)
+|    `min_model` | type [model](#model) | model corresponding to the minimal solution
+|      `min_res` | type [res](#res)     | residual info corresponding to the minimal solution
 
 <a name="cfg"/>
 
@@ -145,7 +163,7 @@ Contains extra information about the optimization.
 
 Solver configurations:
 * `final_model` - the selected camera model (default: 'kb')
-* `final_complexity` - the degree of the polynomial, if the final model is a polynomial; otherwise, ignored (default: 4).
+* `final_complexity` - a degree of the polynomial if the final model is polynomial, otherwise ignored (default: 4)
 
 Sampler configurations:
 * `min_trial_count` - minimum number of iterations (default: 20)
@@ -168,92 +186,15 @@ Refinement configurations:
 
 ## Examples and wrappers
 
-<a name="csponds"/>
+<a name="calib-csponds"/>
 
-### 3D<->2D correspondences
-See a complete example of using [`calibrate.m`](./core/calibrate.m) and [`get_poses.m`](./core/get_poses.m) in  [`calib_run_opt1.m`](./calib_run_opt1.m).
+### 2D<->3D correspondences
+BabelCalib provides a convenience wrapper [`calib_run_opt1.m`](./calib_run_opt1.m) for running the calibraition  [`calibrate.m`](./core/calibrate.m)  with a training set and evaluating [`get_poses.m`](./core/get_poses.m) with a test set.
 
-<a name="delitlle"/>
+<a name="calib-deltille"/>
 
 ### Deltille
-Wrappers
-See a complete example of using `calibrate_OD` and `get_poses_OD` in  [`calib_run_opt2.m`](./calib_run_opt2.m).
-- [`calib_run_opt2.m`](./calib_run_opt2.m) (for .orpc+.dsc format) or
-The data formats and the prototype functions are explained below.
-
-```
-    % varargin : 'param_1', value_1, 'param_2', value_2, ...
-    %            where param_i is either in the configurations (see default values in core/parse_cfg.m) or:
-    %            model : struct (default: [])
-    %                    PLACEHOLDER
-    %            board_idxs : array (default: [])
-    %                         list of indices of boards to use
-    %            img_paths : cell array of character vectors (default: {})
-    %                        list of image paths corresponding to orpc_paths
-    %
-```
-See a complete example of using `calibrate` and `get_poses` in  [`calib_run_opt1.m`](./calib_run_opt1.m).
-
-
-<a name="opt2"/>
-
-### Calibrating from .orpc + .dsc files
-1. Function [`calibrate_OD`](./core/calibrate_OD.m):
-```matlab
-function [model, res, corners_all, boards, imgsize, good_imgs] = calibrate_OD(orpc_paths, dsc_path, varargin)
-    % Calibrate camera from .orpc-.dsc files
-    %
-    % Parameters
-    % ----------
-    % varargin : 'param_1', value_1, 'param_2', value_2, ...
-    %            where param_i is either in the configurations (see default values in core/parse_cfg.m) or:
-    %            board_idxs : array (default: [])
-    %                         list of indices of boards to use
-    %            img_paths : cell array of character vectors (default: {})
-    %                        list of image paths corresponding to orpc_paths
-    %
-    % Returns
-    % -------
-    % model : struct
-    % res : struct
-    % corners_all : struct
-    % boards : struct
-    % imgsize : array
-    %           image size as [height, width]
-    % good_imgs : cell array of character vectors
-```
-
-2. Function [`get_poses_OD`](./core/get_poses_OD.m):
-```matlab
-function [model, res, corners_all, boards, imgsize, good_imgs] = get_poses_OD(orpc_paths, dsc_path, varargin)
-
-    % Estimate camera poses from .orpc-.dsc files
-    %
-    % Parameters
-    % ----------
-    % orpc_paths : cell array of character vectors
-    %              list of paths to .orpc files (detected corners)
-    % dsc_path : character vector
-    %            path to .dsc file (calibration target)
-    % varargin : 'param_1', value_1, 'param_2', value_2, ...
-    %             param_i is either in the configurations (see default values in core/parse_cfg.m) or:
-    %            board_idxs : array (default: [])
-    %                         list of indices of boards to use
-    %            img_paths : cell array of character vectors (default: {})
-    %                        list of image paths corresponding to orpc_paths
-    %
-    % Returns
-    % -------
-    % model : struct
-    % res : struct
-    % corners_all : struct
-    % boards : struct
-    % imgsize : array
-    %           image size as [height, width]
-    % good_imgs : cell array of character vectors
-
-```
-See a complete example of using `calibrate_OD` and `get_poses_OD` in  [`calib_run_opt2.m`](./calib_run_opt2.m).
+The [Deltille detector](https://github.com/facebookarchive/deltille) is a robust deltille and checkerboard detector. It comes with detector library, example detector code, and MATLAB bindings. BabelCalib provides functionns for calibration and evaluation using the Deltille software's outputs. Calibration from Deltille detections requires format conversion which is peformed by [`import_ODT.m`](./core/feature/import_ODT.m). A complete example of using `calibrate` and `get_poses` with `import_ODT` is provided in  [`calib_run_opt2.m`](./calib_run_opt2.m).
 
 <a name="citation"/>
 
