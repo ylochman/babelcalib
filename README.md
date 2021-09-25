@@ -34,8 +34,8 @@ BabelCalib supports calibration targets made of a collection of calibration boar
     - [Evaluation](#evaluation)
     - [Type Definitions](#defs)
 - [Examples and wrappers](#examples)
-    - [Calibrating with 3D<->2D correspondences](#calib-csponds)
-    - [Calibrating with Deltille](#calib-deltille)
+    - [Calibrating with 3D<->2D correspondences](#csponds)
+    - [Calibrating with Deltille](#deltille)
 - [Citation](#citation)
 - [License](#license)
 
