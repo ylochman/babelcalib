@@ -10,7 +10,7 @@ function [solver_cfg, sampler_cfg, ransac_cfg, opt_cfg] = parse_cfg(varargin)
 
     cfg.min_trial_count = 20;
     cfg.max_trial_count = 50;
-    cfg.max_num_retries = 500;
+    cfg.max_num_retries = 50;
     cfg.confidence = 0.995;
 
     cfg.display = true;
