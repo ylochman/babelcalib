@@ -194,7 +194,7 @@ BabelCalib provides a convenience wrapper [`calib_run_opt1.m`](./calib_run_opt1.
 <a name="calib-deltille"/>
 
 ### Deltille
-The [Deltille detector](https://github.com/facebookarchive/deltille) is a robust deltille and checkerboard detector. It comes with detector library, example detector code, and MATLAB bindings. BabelCalib provides functionns for calibration and evaluation using the Deltille software's outputs. Calibration from Deltille detections requires format conversion which is peformed by [`import_ODT.m`](./core/feature/import_ODT.m). A complete example of using `calibrate` and `get_poses` with `import_ODT` is provided in  [`calib_run_opt2.m`](./calib_run_opt2.m).
+The [Deltille detector](https://github.com/facebookarchive/deltille) is a robust deltille and checkerboard detector. It comes with detector library, example detector code, and MATLAB bindings. BabelCalib provides functions for calibration and evaluation using the Deltille software's outputs. Calibration from Deltille detections requires format conversion which is peformed by [`import_ODT.m`](./core/feature/import_ODT.m). A complete example of using `calibrate` and `get_poses` with `import_ODT` is provided in  [`calib_run_opt2.m`](./calib_run_opt2.m).
 
 <a name="citation"/>
 
