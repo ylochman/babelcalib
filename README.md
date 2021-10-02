@@ -189,7 +189,7 @@ Refinement configurations:
 <a name="calib-csponds"/>
 
 ### 2D<->3D correspondences
-BabelCalib provides a convenience wrapper [`calib_run_opt1.m`](./calib_run_opt1.m) for running the calibraition  [`calibrate.m`](./core/calibrate.m)  with a training set and evaluating [`get_poses.m`](./core/get_poses.m) with a test set.
+BabelCalib provides a convenience wrapper [`calib_run_opt1.m`](./calib_run_opt1.m) for running the calibration  [`calibrate.m`](./core/calibrate.m)  with a training set and evaluating [`get_poses.m`](./core/get_poses.m) with a test set.
 
 <a name="calib-deltille"/>
 
