@@ -38,15 +38,13 @@ classdef x7X_to_Rt_c < WRAP.Solver
                 x0 = x(1,:);
                 y0 = x(2,:);
                 for k=1:size(F,3)
-                    % Sampson correstion
+                    % Corner correction
                     a = F(:,:,k) * X;
                     x_corr(1,:,k) = (a(2,:).^2 .* x0 - a(1,:).*a(2,:) .* y0 - a(3,:).*a(1,:))./...
                     (a(1,:).^2 + a(2,:).^2);
                     x_corr(2,:,k) = (a(1,:).^2 .* y0 - a(1,:).*a(2,:) .* x0 - a(3,:).*a(2,:))./...
                     (a(1,:).^2 + a(2,:).^2);
                     x_corr(3,:,k) = x(3,:);
-                    % mean(abs(diag(x' * a)))
-                    % mean(abs(diag(x_corr(:,:,k)' * a)))
                 end
             end
             R_array = arrayfun(@(x) reshape(x{1},3,3), mat2cell(reshape(R,9,size(R,3)),9,ones(1,size(R,3))),'UniformOutput',0);

@@ -1,6 +1,6 @@
 
 classdef NPosesSolver < handle & matlab.mixin.Heterogeneous
-% N Poses from N images given camera calibration
+% Estimate N poses for N images given camera intrinsics
 
 properties
     solvers = WRAP.Solver.empty;

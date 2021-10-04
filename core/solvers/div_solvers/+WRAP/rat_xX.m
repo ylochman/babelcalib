@@ -1,6 +1,4 @@
 classdef rat_xX < WRAP.RationalSolver & dynamicprops
-    % Estimated parameters: lambda1, lambda2, ...
-
     properties
         Rtc_solver = [];
         complexity = 3;

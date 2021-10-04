@@ -1,4 +1,4 @@
-function [corners, boards, imgsize] = import_OD(orpc_paths, dsc_path, tp_path, varargin)
+function [corners, boards, imgsize, img_paths] = import_ODT(orpc_paths, dsc_path, tp_path, varargin)
     cfg.img_paths = [];
     cfg.board_idxs = [];
     cfg = cmp_argparse(cfg, varargin{:});
@@ -12,5 +12,5 @@ function [corners, boards, imgsize] = import_OD(orpc_paths, dsc_path, tp_path, v
         cfg.img_paths = cfg.img_paths(good_imgs);
         corners = corners(good_imgs);
     end
-    
+    img_paths = cfg.img_paths;
 end

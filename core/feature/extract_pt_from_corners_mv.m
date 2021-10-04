@@ -1,9 +1,4 @@
 function [x, X, G] = extract_pt_from_corners_mv(corners, boards, board_idxs)
-    % Args:
-    %   x -- 2xN array -- N image points
-    %   X -- 2xK array -- K planar target points
-    %   X_cspond -- 1xN array -- x<->X correspondences
-    
     num_imgs = numel(corners);
     x = {}; X = {}; G = {};
     for n=1:num_imgs

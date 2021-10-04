@@ -1,5 +1,4 @@
 function [k, errs] = fit_bc_to_rat(x0, k0, lambda, K, complexity)
-
     if nargin < 5
         complexity = 3;
     end
@@ -19,7 +18,6 @@ function [k, errs] = fit_bc_to_rat(x0, k0, lambda, K, complexity)
             b = [r0 - rho]';
             A = [rho.^(pows'+1); -r0 .* rho.^(pows')]';
             k0 = transpose((A'*A)\(A'*b));
-            % vecnorm(errfun(k0, X, x0))
         end
     end
 
@@ -27,22 +25,6 @@ function [k, errs] = fit_bc_to_rat(x0, k0, lambda, K, complexity)
     assert(all(imag(k)<1e-7));
     k = real(k);
     errs = vecnorm(reshape(errs,2,[]));
-
-    % display(['RMS Fitting Error: ' num2str(rms(errs)) ' px.'])
-    % X2 = CAM.backproject_bc(x0, [], k);
-    % x2 = CAM.project_bc(X, [], k);
-    % close all
-    % fig;
-    % subplot(1,2,1)
-    % GRID.draw(x0)
-    % GRID.draw(x2)
-    % axis equal
-    % subplot(1,2,2)
-    % GRID.draw3d(X./vecnorm(X))
-    % GRID.draw3d(X2./vecnorm(X2))
-    % axis equal
-    % view(3)
-    % keyboard
 end
 
 function err = errfun(k, X, xd)

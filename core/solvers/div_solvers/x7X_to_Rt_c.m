@@ -31,8 +31,6 @@ function [F, c, H, R, t] = x7X_to_Rt_c(x, y, X, Y)
     g = unique(g);
     v = g .* v(:,1) + (1 - g) .* v(:,2);
 
-    % xx = [x; y];
-    % XX = [X; Y];
     for k = 1:size(v,2)
         f = v(:,k);
         F(:,:,k) = reshape(f,3,3)';
@@ -42,9 +40,6 @@ function [F, c, H, R, t] = x7X_to_Rt_c(x, y, X, Y)
         c(2,k) = V(2,end)./V(3,end);
         v(:,k) = reshape(F(:,:,k)',[],1);
         H(:,:,k) = reshape([v(4:6,k); -v(1:3,k)],3,2)';
-        % if mean(diag([xx;ones(1,7)]' * F(:,:,k) * [XX;ones(1,7)])') > 1
-        %     keyboard
-        % end
     end
 
     if nargout >= 4

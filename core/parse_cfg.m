@@ -3,10 +3,9 @@ function [solver_cfg, sampler_cfg, ransac_cfg, opt_cfg] = parse_cfg(varargin)
     cfg = struct();
 
     cfg.sample_size = 14;
-    cfg.solver_model = 'rat';
     cfg.solver_complexity = 2;
-    cfg.final_model = 'kb';
-    cfg.final_complexity = 4;
+    cfg.target_model = 'kb';
+    cfg.target_complexity = 4;
 
     cfg.min_trial_count = 20;
     cfg.max_trial_count = 50;
@@ -24,10 +23,9 @@ function [solver_cfg, sampler_cfg, ransac_cfg, opt_cfg] = parse_cfg(varargin)
 
     % Configurations of the solver
     solver_cfg = {'sample_size', cfg.sample_size,...
-                  'solver_model', cfg.solver_model,...
                   'solver_complexity', cfg.solver_complexity,...
-                  'final_model', cfg.final_model,...
-                  'final_complexity', cfg.final_complexity,...
+                  'target_model', cfg.target_model,...
+                  'target_complexity', cfg.target_complexity,...
     };
 
     % Configurations of the sampler

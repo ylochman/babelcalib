@@ -80,8 +80,6 @@ classdef Ransac < handle
                 
                 assert(is_sample_good, ...
                     'Could not draw a non-degenerate sample!');
-                % assert(has_model,...
-                    % 'Could not generate a model!');
                 if ~has_model
                     optM = [];
                     opt_res = [];
@@ -150,9 +148,6 @@ classdef Ransac < handle
                             end
                         end
                     
-                        % Update estimate of est_trial_count, the number
-                        % of trial_count to ensure we pick, with
-                        % probability p, a data set with no outliers.
                         stats.N = this.sampler.update_trial_count(opt_res.info.cs);
                     end   
                 end

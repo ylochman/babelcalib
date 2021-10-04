@@ -1,5 +1,5 @@
 function err = sampson_err_cH(params, X, x)
-    % Sampson error through {c,H}-parameterization
+    % One-sided Sampson error through {c,H}-parameterization
     c = params(1:2)';
     h = params(3:end);
     h = [h(1:3) 1 h(4:5)];

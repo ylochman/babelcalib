@@ -9,42 +9,6 @@ classdef RationalSolver < WRAP.Solver
             this = this@WRAP.Solver(mss, varargin{:});
         end
 
-        function models = fit(this, x, idx, X, varargin)
-            if nargin < 3, idx = []; end
-            [data, varinput] = this.transform_meas(x, idx, X);
-            models = this.solve(data, varinput);
-        end
-
-        function res = verify_eqs(this, proj_params, x, idx, X)
-            if nargin < 4, idx = []; end
-            data = this.transform_meas(x, idx);
-            res = this.verify_eqs_(proj_params, data);
-        end
-
-        function res = verify_eqs_(this, proj_params, data)
-            eqs = this.problem0(proj_params, data);
-            res = true;
-            if any(abs(eqs) > 1e-5)
-                res = false;
-            end
-        end
-
-        function [eqs,data,eqs_data] = problem(this, data)
-            error('Not implemented.')
-        end
-
-        function eqs = problem0(this, proj_params, data, int_data)
-            error('Not implemented.')
-        end
-       
-        function M = solve(this, data)
-            error('Not implemented.')
-        end
-
-        function [data, varinput] = transform_meas(this, x, idx, X)
-            error('Not implemented.')
-        end
-
         function flag = is_model_good(this, meas, idx, model, varargin)
             flag = this.valid_proj_params(model.proj_params);
         end
