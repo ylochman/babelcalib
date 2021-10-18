@@ -208,6 +208,7 @@ If you find this work useful in your research, please consider citing:
     author    = {Lochman, Yaroslava and Liepieshov, Kostiantyn and Chen, Jianhui and Perdoch, Michal and Zach, Christopher and Pritts, James},
     booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
     year      = {2021},
+    pages     = {15253-15262}
 }
 ```
 
