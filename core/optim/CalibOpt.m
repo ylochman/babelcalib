@@ -112,15 +112,6 @@ classdef CalibOpt < handle
             calc_residual_fn = @(dz,z0,xdX) this.calc_residual(dz,z0,xdX);
             [dz,~,residual] = ...
                 lsqnonlin(calc_residual_fn,dz0,[],[],options,z0,xdX);
-            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % keyboard
-            % K = 100;
-            % dz1s = -4*dz(1) + 10*dz(1)*linspace(0,1,K);
-            % dz2s = -4*dz(2) + 10*dz(2)*linspace(0,1,K);
-            % losses = arrayfun(@(y) arrayfun(@(x) sum( calc_residual_fn([x; y; dz(3:end)], z0, xdX).^2,'all'), dz1s), dz2s, 'UniformOutput', false);
-            % losses = vstack(losses{:});
-            % imshow(losses)
-            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             loss = sum(residual.^2,'all');
             assert(loss <= res0.loss, ...
                    'Local optimization increased the loss.');
