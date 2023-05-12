@@ -183,7 +183,7 @@ classdef CalibOpt < handle
             img_cspond = kron(this.img_cspond, [1 1]);
             Jpat = ones(numel(img_cspond),max(this.params_idx.t));
             for k=1:max(img_cspond)
-                idxs = boolean(kron(1:max(img_cspond)~=k,[1 1 1]));
+                idxs = logical(kron(1:max(img_cspond)~=k,[1 1 1]));
                 Jpat(img_cspond==k,this.params_idx.R(idxs)) = 0;
                 Jpat(img_cspond==k,this.params_idx.t(idxs)) = 0;
             end
