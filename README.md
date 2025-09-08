@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![Paper](https://img.shields.io/badge/arXiv-Preprint-brightgreen)](https://arxiv.org/abs/2109.09704)
-[![Datasets](https://img.shields.io/badge/gdrive-Datasets-yellow)](https://drive.google.com/drive/folders/1MidyBPgK7GVqWA0qkiQq6NvhcuWQAHaZ)
+[![Paper](https://img.shields.io/badge/-Preprint-brightgreen)](https://arxiv.org/abs/2109.09704)
+[![Datasets](https://img.shields.io/badge/-Datasets-yellow)](https://github.com/ylochman/babelcalib/releases/tag/datasets)
 [![Conference](https://img.shields.io/badge/ICCV21-Paper-blue)](https://openaccess.thecvf.com/content/ICCV2021/html/Lochman_BabelCalib_A_Universal_Approach_to_Calibrating_Central_Cameras_ICCV_2021_paper.html)
 [![Poster](https://img.shields.io/badge/ICCV21-Poster-purple)](https://ylochman.github.io/babelcalib/poster.pdf)
 [![Youtube](https://img.shields.io/badge/ICCV21-Presentation-red)](https://www.youtube.com/watch?v=7cClH_mPfHo)
